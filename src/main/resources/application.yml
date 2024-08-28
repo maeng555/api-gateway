@@ -1,0 +1,37 @@
+spring.application.name: api-gateway
+
+server:
+  port:9000
+
+# localhost:9000/book -> localhost:8080/books
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: book-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/book/**
+          filters:
+            - RewritePath=/book(?<param>.*), /books$\{param}
+
+        - id: post-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/post/**
+          filters:
+            - RewritePath=/post(?<param>.*), /posts$\{param}
+
+        - id: member-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/member/**
+          filters:
+            - RewritePath=/member(?<param>.*), /members$\{param}
+
+        - id: bookshelf-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/bookshelf/**
+          filters:
+            - RewritePath=/bookshelf(?<param>.*), /bookshelves$\{param}
